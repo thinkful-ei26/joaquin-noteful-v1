@@ -3,6 +3,8 @@
 const { PORT } = require('./config');
 const express = require('express');
 const data = require('./db/notes');
+const simDB = require('./db/simDB');  // <<== add this
+const notes = simDB.initialize(data); // <<== and this
 const app = express();
 const { requestLogger } = require('./middleware/logger');
 
