@@ -18,6 +18,17 @@ app.get('/api/notes/:id', (req, res) => {
   res.json(note);
 });
 
+app.get('/api/notes/:searchTerm', (req, res) => {
+  const { searchTerm } = req.query;
+  res.json(
+    searchTerm ? data.filter(item => item.title.include(searchTerm)) : data
+  );
+  res.json(searchTerm);
+});
+
+// const { searchTerm } = req.query;
+// res.json(searchTerm ? data.filter(item => item.title.includes(searchTerm)) : data);
+
 app
   .listen(8080, function() {
     console.info(`Server listening on ${this.address().port}`);
