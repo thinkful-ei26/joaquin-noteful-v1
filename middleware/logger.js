@@ -6,3 +6,6 @@ function requestLogger(req, res, next) {
     `${now.toLocaleDateString()} ${now.toLocaleTimeString()} ${req.method} ${req.url}`);
   next();
 }
+
+
+module.exports = { requestLogger };
