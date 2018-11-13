@@ -11,6 +11,7 @@ const { requestLogger } = require('./middleware/logger');
 // ADD STATIC SERVER HERE
 app.use(requestLogger);
 app.use(express.static('public')); //if you find a request for a static asset, access this directory public
+app.use(express.json());
 
 app.get('/api/notes', (req, res, next) => {
   const { searchTerm } = req.query;
@@ -29,7 +30,7 @@ app.get('/api/notes/:id', (req, res, next) => {
       return next(err);
     }
     if(id){
-      res.json(id);
+      res.json(item);
     }else {
       return 'not found';
     }
@@ -42,6 +43,31 @@ app.get('/api/notes/:id', (req, res, next) => {
 // app.get('/boom', (req, res, next) => {
 //   throw new Error('Boom!!');
 // });
+
+app.put('/api/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  /***** Never trust users - validate input *****/
+  const updateObj = {};
+  const updateFields = ['title', 'content'];
+
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+
+  notes.update(id, updateObj, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.json(item);
+    } else {
+      next();
+    }
+  });
+});
 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
