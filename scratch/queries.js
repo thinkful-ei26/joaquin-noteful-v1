@@ -41,26 +41,26 @@ notes.update(1005, updateObj, (err, item) => {
 });
 
 //CREATE a new note .create()
-notes.create(1003, (err, item) => {
-  if (err) {
-    console.error(err);
-  }
-  if (item) {
-    console.log(item);
-  } else {
-    console.log('not found');
-  }
-});
+// notes.create(1003, (err, item) => {
+//   if (err) {
+//     console.error(err);
+//   }
+//   if (item) {
+//     console.log(item);
+//   } else {
+//     console.log('not found');
+//   }
+// });
 
 
 //DELETE .delete()
-notes.delete(1004, (err, item) => {
-  if (err) {
-    console.error(err);
-  }
-  if (item) {
-    console.log(item);
-  } else {
-    console.log('not found');
-  }
-});
+// notes.delete(1004, (err, item) => {
+//   if (err) {
+//     console.error(err);
+//   }
+//   if (item) {
+//     console.log(item);
+//   } else {
+//     console.log('not found');
+//   }
+// });
