@@ -4,10 +4,11 @@ const { PORT } = require('./config');
 const express = require('express');
 const data = require('./db/notes');
 const app = express();
-app.use(express.static('public'));
+
 
 
 // ADD STATIC SERVER HERE
+app.use(express.static('public'));//if you find a request for a static asset, access this directory public
 
 app.get('/api/notes/searchTerm', (req, res) => {
   const { searchTerm } = req.query;
