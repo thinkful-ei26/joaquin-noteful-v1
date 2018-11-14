@@ -2,72 +2,18 @@
 
 const { PORT } = require('./config');
 const express = require('express');
-const data = require('./db/notes');
-const simDB = require('./db/simDB'); // <<== add this
-const notes = simDB.initialize(data); // <<== and this
+
 const app = express();
-const { requestLogger } = require('./middleware/logger');
+const morgan = require('morgan');
+const notesRouter = require('./router/notes.router.js');
+// const { requestLogger } = require('./middleware/logger');
 
 // ADD STATIC SERVER HERE
-app.use(requestLogger);
+app.use(morgan('common'));
 app.use(express.static('public')); //if you find a request for a static asset, access this directory public
 app.use(express.json());
+app.use('/api/notes', notesRouter );
 
-app.get('/api/notes', (req, res, next) => {
-  const { searchTerm } = req.query;
-  notes.filter(searchTerm, (err, list) => {
-    if (err) {
-      return next(err);
-    }
-    res.json(list);
-  });
-});
-
-app.get('/api/notes/:id', (req, res, next) => {
-  const id = req.params.id;
-  notes.find(id, (err, item) =>{
-    if(err){
-      return next(err);
-    }
-    if(id){
-      res.json(item);
-    }else {
-      return 'not found';
-    }
-  });
-  // let note = data.find(item => item.id === Number(id));
-  // console.log(req.params);
-  // res.json(note);
-});
-
-// app.get('/boom', (req, res, next) => {
-//   throw new Error('Boom!!');
-// });
-
-app.put('/api/notes/:id', (req, res, next) => {
-  const id = req.params.id;
-
-  /***** Never trust users - validate input *****/
-  const updateObj = {};
-  const updateFields = ['title', 'content'];
-
-  updateFields.forEach(field => {
-    if (field in req.body) {
-      updateObj[field] = req.body[field];
-    }
-  });
-
-  notes.update(id, updateObj, (err, item) => {
-    if (err) {
-      return next(err);
-    }
-    if (item) {
-      res.json(item);
-    } else {
-      next();
-    }
-  });
-});
 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -90,3 +36,4 @@ app
   .on('error', err => {
     console.error(err);
   });
+
