@@ -5,13 +5,14 @@ const express = require('express');
 
 const app = express();
 const morgan = require('morgan');
+
 const notesRouter = require('./router/notes.router.js');
 // const { requestLogger } = require('./middleware/logger');
+app.use(express.json());
 
 // ADD STATIC SERVER HERE
 app.use(morgan('common'));
 app.use(express.static('public')); //if you find a request for a static asset, access this directory public
-app.use(express.json());
 app.use('/api/notes', notesRouter );
 
 

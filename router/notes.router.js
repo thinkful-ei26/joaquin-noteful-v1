@@ -27,11 +27,36 @@ router.get('/:id', (req, res, next) => {
     }else {
       return 'not found';
     }
+
   });
  
 });
 
+// Post (insert) an item
+router.post('/', (req, res, next) => {
+  const { title, content } = req.body;
+  console.log(req.body);
+  
 
+  const newItem = { title, content };
+  /***** Never trust users - validate input *****/
+  if (!newItem.title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  notes.create(newItem, (err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item) {
+      res.location(`http://${req.headers.host}/notes/${item.id}`).status(201).json(item);
+    } else {
+      next();
+    }
+  });
+});
 
 
 
