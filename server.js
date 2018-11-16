@@ -13,8 +13,7 @@ app.use(express.json());
 // ADD STATIC SERVER HERE
 app.use(morgan('common'));
 app.use(express.static('public')); //if you find a request for a static asset, access this directory public
-app.use('/api/notes', notesRouter );
-
+app.use('/api/notes', notesRouter);
 
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -30,11 +29,13 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app
-  .listen(PORT, function() {
-    console.info(`Server listening on ${this.address().port}`);
-  })
-  .on('error', err => {
-    console.error(err);
-  });
-
+if (require.main === module) { //Prevents server from automatically running 'npm start' when we run tests.
+  app
+    .listen(PORT, function() {
+      console.info(`Server listening on ${this.address().port}`);
+    })
+    .on('error', err => {
+      console.error(err);
+    });
+}
+module.exports = app; //Exports the express app so we can use it in our test files
